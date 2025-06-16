@@ -7,13 +7,16 @@ INITIAL_POPULATION = 1000
 NUM_INITIAL_OWN_UNITS = 500_000
 NUM_INITIAL_SHARED_UNITS = 500_000
 
+DATABASE_PATH = "../database"
+TEMPLATE_PATH = "../templates"
+
 tables = ["persons", "stocks"]
 for table in tables:
-    for file_name in os.listdir(f"../database/{table}"):
+    for file_name in os.listdir(f"{DATABASE_PATH}/{table}"):
         os.remove(f"../database/{table}/{file_name}")
 
 def load_template(name):
-    with open(f"../templates/{name}.txt", "r") as template_file:
+    with open(f"{TEMPLATE_PATH}/{name}.txt", "r") as template_file:
         objects = [object.strip() for object in template_file.readlines()]
     return objects
 
@@ -31,7 +34,7 @@ for idx in range(INITIAL_POPULATION):
         person_id=person_id_circle[idx],
         units=NUM_INITIAL_OWN_UNITS
     )
-    with open(f"../database/stocks/{own_stock_id}.json", "w") as stock_file:
+    with open(f"{DATABASE_PATH}/stocks/{own_stock_id}.json", "w") as stock_file:
         json.dump(own_stock, stock_file, indent=4)
     
     shared_stock_id = stock_id_circle[idx][1]
@@ -42,7 +45,7 @@ for idx in range(INITIAL_POPULATION):
         person_id=person_id_circle[next_idx],
         units=NUM_INITIAL_SHARED_UNITS
     )
-    with open(f"../database/stocks/{own_stock_id}.json", "w") as stock_file:
+    with open(f"{DATABASE_PATH}/stocks/{own_stock_id}.json", "w") as stock_file:
         json.dump(own_stock, stock_file, indent=4)
 
 for idx in range(INITIAL_POPULATION):
@@ -56,5 +59,5 @@ for idx in range(INITIAL_POPULATION):
         owned_stocks=[stock_id_circle[idx][0], stock_id_circle[idx][1]],
         issued_stocks=[stock_id_circle[idx][0], stock_id_circle[prev_idx][1]]
     )
-    with open(f"../database/persons/{person_id}.json", "w") as person_file:
+    with open(f"{DATABASE_PATH}/persons/{person_id}.json", "w") as person_file:
         json.dump(person, person_file, indent=4)
