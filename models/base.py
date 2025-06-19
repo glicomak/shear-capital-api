@@ -1,4 +1,5 @@
 import json
+import os
 
 class BaseModel:
     def save(self):
@@ -10,3 +11,14 @@ class BaseModel:
         with open(f"database/{cls._model_name}/{id}.json", "r") as json_file:
             data = json.load(json_file)
         return cls(**data)
+    
+    @classmethod
+    def all(cls):
+        all_objects = []
+
+        for file_name in os.listdir(f"database/{cls._model_name}"):
+            with open(f"database/{cls._model_name}/{file_name}", "r") as json_file:
+                data = json.load(json_file)
+                all_objects.append(cls(**data))
+
+        return all_objects

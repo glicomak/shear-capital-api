@@ -1,5 +1,4 @@
-import json
-
+from core.config import NUM_STOCK_UNITS
 from models import BaseModel
 from uuid import uuid4
 
@@ -14,14 +13,11 @@ class Stock(BaseModel):
 
     @classmethod
     def new(cls, person_id):
-        with open("meta/config.json", "r") as config_file:
-            config = json.load(config_file)
-
         return cls(
             id=str(uuid4()),
             owner_id=person_id,
             person_id=person_id,
-            units=config["num_stock_units"]
+            units=NUM_STOCK_UNITS
         )
 
     def _to_dict(self):
